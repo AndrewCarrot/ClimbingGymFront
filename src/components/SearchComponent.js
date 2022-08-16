@@ -11,12 +11,15 @@ export default function SearchComponent(){
 
     const onSearch = async (value) =>{
 
+
         const response = await fetch(`https://spider-system.herokuapp.com/card-associated/get?cardNumber=${value}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
             },
         });
+
+
 
         if (!response.ok) {
             setErr(true)
@@ -27,7 +30,7 @@ export default function SearchComponent(){
 
          /*TODO create customPassComponent and check where to redirect */
         if(data.climber !== null)
-            navigate('/climber-profile',{state:{data}});
+            navigate('/climber-profile',{state:value});
 
         setErr(true)
     };

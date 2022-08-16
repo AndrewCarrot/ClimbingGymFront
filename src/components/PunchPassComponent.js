@@ -11,7 +11,7 @@ export default function PunchPassComponent(props){
                 Accept: 'application/json',
             },
         })
-            .finally()
+            .then(()=>props.handleReload())
     }
 
     function handleTakePunch(){
@@ -21,7 +21,7 @@ export default function PunchPassComponent(props){
                 Accept: 'application/json',
             },
         })
-            .finally()
+            .then(()=> props.handleReload())
     }
 
     const dataSource = [

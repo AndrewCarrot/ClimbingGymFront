@@ -1,10 +1,8 @@
 import {Button, Form, Input} from "antd";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
 
 
 export default function NewClimberComponent(){
-    const[climber, setClimber] = useState({})
     const navigate = useNavigate()
 
     const onFinish = async(values) =>{
@@ -23,31 +21,9 @@ export default function NewClimberComponent(){
         });
 
        if (response.ok){
-           setClimber(()=>{
-               redirect(values.cardNumber)
-           })
 
+           navigate('/climber-profile', {state: values.cardNumber});
        }
-    }
-
-    const redirect = async(cardNumber)=>{
-        //TODO better way to redirect to created climber ?
-
-        const response = await fetch(`https://spider-system.herokuapp.com/card-associated/get?cardNumber=${cardNumber}`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            /*TODO create customPassComponent and check where to redirect */
-            if (result.climber !== null)
-                navigate('/climber-profile', {state: {result}});
-        } else {
-            console.log("zjebało się")
-        }
     }
 
     function onFinishFailed(){

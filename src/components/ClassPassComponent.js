@@ -21,11 +21,23 @@ export default function ClassPassComponent(props){
     }
 
     function handleAddPunch(){
-
+        fetch(`https://spider-system.herokuapp.com/classPass/${props.climberId}/givePunch`, {
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+            .then(()=>props.handleReload())
     }
 
     function handleTakePunch(){
-
+        fetch(`https://spider-system.herokuapp.com/classPass/${props.climberId}/takePunch`,{
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+            .then(()=> props.handleReload())
     }
 
     const validFrom = new Date(getParsedDate(props.pass.validFrom))

@@ -61,7 +61,7 @@ export default function AllClimbersComponent(){
 
         const data = await response.json();
         if(data.climber !== null)
-            navigate('/climber-profile',{state:{data}});
+            navigate('/climber-profile',{state:data.climber.cardNumber});
 
     }
 

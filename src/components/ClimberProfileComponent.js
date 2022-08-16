@@ -3,20 +3,36 @@ import PunchPassComponent from "./PunchPassComponent";
 import {useLocation} from "react-router-dom";
 import TimePassComponent from "./TimePassComponent";
 import ClassPassComponent from "./ClassPassComponent";
+import {useEffect, useState} from "react";
 
 
 export default function ClimberProfileComponent(){
+    const [reload, setReload] = useState(false)
+    const [climber, setClimber] = useState([{
+        id:null,
+        cardNumber:"",
+        firstName:"",
+        lastName:"",
+        phoneNumber:"",
+        note:"",
+        punchPass:{},
+        timePass:{},
+        classPass:{}
+
+    }])
 
     const location = useLocation();
 
-    // TODO let's pass here cardNumber or sth and do fetch here
+    useEffect(()=>{
+        fetch(`https://spider-system.herokuapp.com/card-associated/get?cardNumber=${location.state}`)
+            .then(res => res.json())
+            .then(data => setClimber(data.climber))
+    },[reload])
 
-    const{id, firstName, lastName, phoneNumber, cardNumber, note} = location.state.data.climber
 
-    const timePass = location.state.data.climber.timePass
-    const punchPass = location.state.data.climber.punchPass
-    const classPass = location.state.data.climber.classPass
-
+    function handleReload(){
+        setReload(prevState => !prevState)
+    }
 
     return(
         <div className={"Climber"} >
@@ -25,18 +41,18 @@ export default function ClimberProfileComponent(){
                 <div className={"name--div"}>
                     <h1><ContactsTwoTone/></h1>
                     <div>
-                        <h1>{firstName}</h1>
-                        <h1>{lastName}</h1>
+                        <h1>{climber.firstName}</h1>
+                        <h1>{climber.lastName}</h1>
                     </div>
                 </div>
                 <div className={"card-phone--div"}>
-                    <h3><CreditCardTwoTone /> {cardNumber}</h3>
-                    <h3><PhoneTwoTone /> {phoneNumber}</h3>
+                    <h3><CreditCardTwoTone /> {climber.cardNumber}</h3>
+                    <h3><PhoneTwoTone /> {climber.phoneNumber}</h3>
                 </div>
                 <div className={"note--div"}>
                    <h1><SnippetsTwoTone /></h1>
                     <p>
-                        {note}
+                        {climber.note}
                     </p>
                 </div>
             </header>
@@ -52,9 +68,9 @@ export default function ClimberProfileComponent(){
                 Karnety:
             </h1>
 
-            {timePass && <TimePassComponent climberId = {id} pass={timePass}/>}
-            {punchPass && <PunchPassComponent climberId = {id} pass={punchPass} />}
-            {classPass && <ClassPassComponent climberId = {id} pass={classPass} />}
+            {climber.timePass && <TimePassComponent climberId = {climber.id} pass={climber.timePass}  />}
+            {climber.punchPass && <PunchPassComponent climberId = {climber.id} pass={climber.punchPass} handleReload={handleReload} />}
+            {climber.classPass && <ClassPassComponent climberId = {climber.id} pass={climber.classPass} handleReload={handleReload}/>}
 
         </div>
     )
