@@ -54,6 +54,34 @@
 .climber--header > *{
     padding: 15px;
 }
+.passes--h1{
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 20px;
+    margin-top: -10px;
+    margin-bottom: -20px;
+}
+
+.passes--modal--div{
+    display: flex;
+}
+
+.passes--modal--div > *{
+    margin: 10px;
+}
+
+.passes--modal--div > * > Button{
+    border-radius: 5px;
+    width: 150px;
+}
+
+
+/* all modals */
+
+.ant-modal-body{
+    height: 100px;
+}
+
 
 /* All Tables */
 .ant-table-thead > tr >th{

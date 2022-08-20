@@ -1,8 +1,21 @@
 
 import {Table} from "antd";
+import {MinusCircleFilled} from "@ant-design/icons";
 
 
 export default function TimePassComponent(props){
+
+
+    //TODO popup with confirmation
+    function handleDelete(){
+        fetch(`https://spider-system.herokuapp.com/timePass/${props.climberId}/delete`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json'
+            }
+        })
+            .then(()=> props.handleReload())
+    }
 
     function getParsedDate(date){
 
@@ -62,6 +75,13 @@ export default function TimePassComponent(props){
             dataIndex: 'leftDays',
             key: 'leftDays',
         },
+        {
+            title:'Usuń',
+            dataIndex: 'delete',
+            render: (_,record)=>(
+                <a onClick={handleDelete} > <MinusCircleFilled  style={{fontSize: 20}} /> </a>
+            )
+        }
 
     ];
     return(

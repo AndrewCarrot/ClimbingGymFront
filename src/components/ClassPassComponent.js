@@ -1,5 +1,5 @@
 import {Space, Table} from "antd";
-import {MinusSquareTwoTone, PlusSquareTwoTone} from "@ant-design/icons";
+import {MinusCircleFilled, MinusSquareTwoTone, PlusSquareTwoTone} from "@ant-design/icons";
 
 
 export default function ClassPassComponent(props){
@@ -36,6 +36,17 @@ export default function ClassPassComponent(props){
             headers: {
                 Accept: 'application/json',
             },
+        })
+            .then(()=> props.handleReload())
+    }
+
+    //TODO popup with confirmation
+    function handleDelete(){
+        fetch(`https://spider-system.herokuapp.com/classPass/${props.climberId}/delete`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json'
+            }
         })
             .then(()=> props.handleReload())
     }
@@ -98,6 +109,13 @@ export default function ClassPassComponent(props){
                 </Space>
             )
         },
+        {
+            title:'Usuń',
+            dataIndex: 'delete',
+            render: (_,record)=>(
+                <a onClick={handleDelete} > <MinusCircleFilled  style={{fontSize: 20}} /> </a>
+            )
+        }
 
 
     ];

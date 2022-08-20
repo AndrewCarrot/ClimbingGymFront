@@ -1,9 +1,19 @@
-import {ContactsTwoTone, CreditCardTwoTone, PhoneTwoTone, SnippetsTwoTone, UserOutlined} from "@ant-design/icons";
+import {
+    ContactsTwoTone,
+    CreditCardTwoTone,
+    PhoneTwoTone,
+    PlusCircleFilled,
+    SnippetsTwoTone,
+    UserOutlined
+} from "@ant-design/icons";
 import PunchPassComponent from "./PunchPassComponent";
 import {useLocation} from "react-router-dom";
 import TimePassComponent from "./TimePassComponent";
 import ClassPassComponent from "./ClassPassComponent";
 import {useEffect, useState} from "react";
+import AddPunchPassComponent from "./AddPunchPassComponent";
+import AddTimePassComponent from "./AddTimePassComponent";
+import AddClassPassComponent from "./AddClassPassComponent";
 
 
 export default function ClimberProfileComponent(){
@@ -57,18 +67,18 @@ export default function ClimberProfileComponent(){
                 </div>
             </header>
 
-            <h1
-                style={{
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    marginTop: -10,
-                    marginBottom: -10
-            }}
-            >
+            <h1 className="passes--h1">
                 Karnety:
             </h1>
+            <div className="passes--modal--div">
 
-            {climber.timePass && <TimePassComponent climberId = {climber.id} pass={climber.timePass}  />}
+                <AddPunchPassComponent climberId={climber.id} handleReload={handleReload} />
+                <AddTimePassComponent climberId={climber.id} handleReload={handleReload} />
+                <AddClassPassComponent climberId={climber.id} handleReload={handleReload} />
+
+            </div>
+
+            {climber.timePass && <TimePassComponent climberId = {climber.id} pass={climber.timePass} handleReload={handleReload} />}
             {climber.punchPass && <PunchPassComponent climberId = {climber.id} pass={climber.punchPass} handleReload={handleReload} />}
             {climber.classPass && <ClassPassComponent climberId = {climber.id} pass={climber.classPass} handleReload={handleReload}/>}
 
