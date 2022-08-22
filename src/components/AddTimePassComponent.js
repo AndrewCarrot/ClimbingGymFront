@@ -1,11 +1,12 @@
 import {useState} from "react";
-import {Button, InputNumber, Modal, Select} from "antd";
+import {Alert, Button, InputNumber, Modal, Select} from "antd";
 import {PlusCircleFilled} from "@ant-design/icons";
 
 export default function AddTimePassComponent(props){
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [timeSelect, setTimeSelect] = useState("")
     const [typeSelect, setTypeSelect] = useState("")
+    const [err, setErr] = useState(false)
 
 
     const date = new Date();
@@ -18,6 +19,13 @@ export default function AddTimePassComponent(props){
     const paddedDay = day.toString().padStart(2, '0')
 
 
+    function handleModalClose(){
+        setTimeSelect("")
+        setTypeSelect("")
+        setIsModalVisible(false)
+        setErr(false)
+    }
+
     function handleTimeSelect(value){
         setTimeSelect(value)
     }
@@ -26,35 +34,35 @@ export default function AddTimePassComponent(props){
         setTypeSelect(value)
     }
 
-    function handleCancel(){
-
-        setTimeSelect("")
-        setTypeSelect("")
-        setIsModalVisible(false)
-    }
-
     const handleModalSubmit = async() =>{
-        const response = await fetch(`https://spider-system.herokuapp.com/timePass/${props.climberId}/new`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                discount: typeSelect === 'ulgowy',
-                note: "",
-                duration: timeSelect,
-                validFrom: `${year}-${paddedMonth}-${paddedDay}` //yyyy-mm-dd
-            })
-        });
 
-        if (response.ok){
-            props.handleReload()
+        if (timeSelect === "")
+            setErr(true)
+        else if(typeSelect === "")
+            setErr(true)
+        else {
+            const response = await fetch(`https://spider-system.herokuapp.com/timePass/${props.climberId}/new`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    discount: typeSelect === 'ulgowy',
+                    note: "",
+                    duration: timeSelect,
+                    validFrom: `${year}-${paddedMonth}-${paddedDay}` //yyyy-mm-dd
+                })
+            });
+
+            if (response.ok) {
+                props.handleReload()
+            }
+
+            setTimeSelect("")
+            setTypeSelect("")
+            setIsModalVisible(false)
         }
-
-        setTimeSelect("")
-        setTypeSelect("")
-        setIsModalVisible(false)
     }
 
     return(
@@ -65,11 +73,10 @@ export default function AddTimePassComponent(props){
             <Modal
                 title="Karnet Czasowy"
                 visible={isModalVisible}
-                onOk={()=>setIsModalVisible(false)}
-                onCancel={()=>setIsModalVisible(false)}
+                onCancel={handleModalClose}
 
                 footer={[
-                    <Button key="cancel" type="primary"  onClick={handleCancel}>
+                    <Button key="cancel" type="primary"  onClick={handleModalClose}>
                         Anuluj
                     </Button>,
                     <Button
@@ -97,14 +104,14 @@ export default function AddTimePassComponent(props){
                     defaultValue="Typ karnetu"
                     style={{
                         width: 220,
-                        float:"right"
+                        marginLeft: 30
                     }}
                     onChange={handleTypeSelect}
                 >
                     <Select.Option value="ulgowy">ulgowy</Select.Option>
                     <Select.Option value="normalny">normalny</Select.Option>
                 </Select>
-
+                {err && <Alert style={{width:160}}  message={timeSelect === "" ? "Podaj czas karnetu!" : "Wybierz typ karnetu!"} type="error" />}
             </Modal>
         </div>
     )

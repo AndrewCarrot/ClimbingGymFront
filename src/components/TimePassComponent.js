@@ -1,6 +1,6 @@
 
-import {Table} from "antd";
-import {MinusCircleFilled} from "@ant-design/icons";
+import {Popconfirm, Table} from "antd";
+import {MinusCircleFilled, QuestionCircleOutlined} from "@ant-design/icons";
 
 
 export default function TimePassComponent(props){
@@ -79,7 +79,19 @@ export default function TimePassComponent(props){
             title:'Usuń',
             dataIndex: 'delete',
             render: (_,record)=>(
-                <a onClick={handleDelete} > <MinusCircleFilled  style={{fontSize: 20}} /> </a>
+                <Popconfirm
+                    title="Are you sure？"
+                    onConfirm={handleDelete}
+                    icon={
+                        <QuestionCircleOutlined
+                            style={{
+                                color: 'red',
+                            }}
+                        />
+                    }
+                >
+                    <a> <MinusCircleFilled  style={{fontSize: 20}} /> </a>
+                </Popconfirm>
             )
         }
 

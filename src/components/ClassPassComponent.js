@@ -1,5 +1,5 @@
-import {Space, Table} from "antd";
-import {MinusCircleFilled, MinusSquareTwoTone, PlusSquareTwoTone} from "@ant-design/icons";
+import {Popconfirm, Space, Table} from "antd";
+import {MinusCircleFilled, MinusSquareTwoTone, PlusSquareTwoTone, QuestionCircleOutlined} from "@ant-design/icons";
 
 
 export default function ClassPassComponent(props){
@@ -40,7 +40,6 @@ export default function ClassPassComponent(props){
             .then(()=> props.handleReload())
     }
 
-    //TODO popup with confirmation
     function handleDelete(){
         fetch(`https://spider-system.herokuapp.com/classPass/${props.climberId}/delete`, {
             method: 'DELETE',
@@ -113,7 +112,19 @@ export default function ClassPassComponent(props){
             title:'Usuń',
             dataIndex: 'delete',
             render: (_,record)=>(
-                <a onClick={handleDelete} > <MinusCircleFilled  style={{fontSize: 20}} /> </a>
+                <Popconfirm
+                    title="Are you sure？"
+                    onConfirm={handleDelete}
+                    icon={
+                        <QuestionCircleOutlined
+                            style={{
+                                color: 'red',
+                            }}
+                        />
+                    }
+                >
+                    <a> <MinusCircleFilled  style={{fontSize: 20}} /> </a>
+                </Popconfirm>
             )
         }
 

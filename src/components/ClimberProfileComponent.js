@@ -14,9 +14,13 @@ import {useEffect, useState} from "react";
 import AddPunchPassComponent from "./AddPunchPassComponent";
 import AddTimePassComponent from "./AddTimePassComponent";
 import AddClassPassComponent from "./AddClassPassComponent";
+import {Button, Modal} from "antd";
+import TextArea from "antd/es/input/TextArea";
 
 
 export default function ClimberProfileComponent(){
+    const [textAreaValue, setTextAreaValue] = useState("")
+    const [isModalVisible, setIsModalVisible] = useState(false)
     const [reload, setReload] = useState(false)
     const [climber, setClimber] = useState([{
         id:null,
@@ -44,9 +48,44 @@ export default function ClimberProfileComponent(){
         setReload(prevState => !prevState)
     }
 
+    function handleModalClose(){
+        setIsModalVisible(false)
+    }
+
+    const handleModalSubmit = async() => {
+        // api call add note
+        const response = await fetch(`https://spider-system.herokuapp.com/climbers/update-note?climberId=${climber.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: textAreaValue
+        });
+
+        if(response.ok) {
+            setIsModalVisible(false)
+            handleReload()
+        }
+    }
+
+    function handleTextAreaChange(e){
+        setTextAreaValue(e.target.value)
+    }
+
+    const handleDeleteNote = async() =>{
+        const response = await fetch(`https://spider-system.herokuapp.com/climbers/delete-note?climberId=${climber.id}`,{
+            method: 'PATCH'
+        })
+
+        if (response.ok)
+            handleReload()
+    }
+
     return(
         <div className={"Climber"} >
 
+            <p>{climber.note}</p>
             <header className={"climber--header"}>
                 <div className={"name--div"}>
                     <h1><ContactsTwoTone/></h1>
@@ -61,9 +100,54 @@ export default function ClimberProfileComponent(){
                 </div>
                 <div className={"note--div"}>
                    <h1><SnippetsTwoTone /></h1>
-                    <p>
-                        {climber.note}
-                    </p>
+                    <a
+                        style={{
+                            fontWeight:"bold",
+                            fontSize:16,
+                            paddingBottom:8
+                    }}
+                        onClick={()=>setIsModalVisible(true)}
+                    >
+                        Dodaj notatkę
+                    </a>
+                    <p
+                        style={{
+                            fontWeight:"bold",
+                            fontSize:16,
+                            paddingTop:8
+                        }}
+                    >/</p>
+                    <a
+                        style={{
+                            fontWeight:"bold",
+                            fontSize:16,
+                            paddingBottom:8
+                        }}
+                        onClick={handleDeleteNote}
+                    >
+                        Usuń notatkę
+                    </a>
+                    <Modal
+                        className="note--modal"
+                        title="Notatka"
+                        visible={isModalVisible}
+                        onCancel={handleModalClose}
+                        footer={[
+                            <Button key="cancel" type="primary"  onClick={handleModalClose}>
+                                Anuluj
+                            </Button>,
+                            <Button
+                                key="submit"
+                                type="primary"
+                                onClick={handleModalSubmit}
+                            >
+                                Dodaj
+                            </Button>,
+                        ]}
+                        destroyOnClose={true}
+                    >
+                        <TextArea onChange={(e)=>handleTextAreaChange(e)} rows={6} placeholder="Pisz pan"  />
+                    </Modal>
                 </div>
             </header>
 

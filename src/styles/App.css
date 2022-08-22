@@ -82,6 +82,10 @@
     height: 100px;
 }
 
+.note--modal .ant-modal-body{
+    height: 200px !important;
+}
+
 
 /* All Tables */
 .ant-table-thead > tr >th{

@@ -1,4 +1,4 @@
-import {Button, InputNumber, Modal, Select} from "antd";
+import {Alert, Button, InputNumber, Modal, Select} from "antd";
 import {useState} from "react";
 import {PlusCircleFilled} from "@ant-design/icons";
 
@@ -6,13 +6,16 @@ export default function AddPunchPassComponent(props){
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [inputNumber, setInputNumber] = useState(8)
     const [selectValue, setSelectValue] = useState("")
+    const [err, setErr] = useState(false)
 
-    function handleCancel(){
-        // set the default value for the state
+
+    function handleModalClose(){
         setInputNumber(8);
         setSelectValue("");
         setIsModalVisible(false);
+        setErr(false)
     }
+
 
     function handleInputNumber(value){
         setInputNumber(value)
@@ -23,37 +26,36 @@ export default function AddPunchPassComponent(props){
     }
 
     const handleModalSubmit = async() =>{
-        console.log(inputNumber , selectValue, props.climberId)
 
         // ignore the warning
         if(inputNumber === null){
-           //TODO
-        }
-        if(selectValue === ""){
-            //TODO
-        }
+            setErr(true)
+        } else if(selectValue.length === 0){
+            setErr(true)
+        }else {
+            const response = await fetch(`https://spider-system.herokuapp.com/punchPass/${props.climberId}/new`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    punches: inputNumber,
+                    discount: selectValue === 'ulgowy',
+                    note: ""
+                })
+            });
 
-        const response = await fetch(`https://spider-system.herokuapp.com/punchPass/${props.climberId}/new`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                punches: inputNumber,
-                discount: selectValue === 'ulgowy',
-                note: ""
-            })
-    });
+            if (response.ok) {
+                props.handleReload()
+            }
 
-        if (response.ok){
-            props.handleReload()
+            // set the default value for the state
+            setInputNumber(8)
+            setSelectValue("");
+            setIsModalVisible(false)
+            setErr(false)
         }
-
-        // set the default value for the state
-        setInputNumber(8)
-        setSelectValue("");
-        setIsModalVisible(false)
     }
 
     return(
@@ -64,9 +66,9 @@ export default function AddPunchPassComponent(props){
             <Modal
                 title="Karnet Ilościowy"
                 visible={isModalVisible}
-                onCancel={()=>setIsModalVisible(false)}
+                onCancel={handleModalClose}
                 footer={[
-                    <Button key="cancel" type="primary"  onClick={handleCancel}>
+                    <Button key="cancel" type="primary" onClick={handleModalClose}>
                         Anuluj
                     </Button>,
                     <Button
@@ -101,6 +103,7 @@ export default function AddPunchPassComponent(props){
                     <Select.Option value="normalny">normalny</Select.Option>
                 </Select>
 
+                {err && <Alert style={{width:160}} message={inputNumber === null ? "Podaj ilość wejść!" : "Wybierz typ karnetu!"} type="error" />}
             </Modal>
         </div>
 
