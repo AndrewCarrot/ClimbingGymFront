@@ -1,6 +1,9 @@
 {
   "name": "spiderfront",
   "version": "0.1.0",
+  "engines": {
+    "node": "18.x"
+  },
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
