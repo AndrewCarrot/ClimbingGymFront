@@ -80,6 +80,7 @@ function App() {
                     }}
                     >
                         <Routes>
+                            <Route path="/" element={<SearchComponent/>}/>
                             <Route path="read" element={<SearchComponent />} />
                             <Route path="climber-profile" element={<ClimberProfileComponent />} />
                             <Route path="new-climber" element={<NewClimberComponent/>}/>
