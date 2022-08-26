@@ -1,6 +1,5 @@
-import {Modal, Popconfirm, Space, Table} from "antd";
+import {message, Popconfirm, Space, Table} from "antd";
 import {MinusCircleFilled, MinusSquareTwoTone, PlusSquareTwoTone, QuestionCircleOutlined} from "@ant-design/icons";
-import {useState} from "react";
 
 
 export default function PunchPassComponent(props){
@@ -13,7 +12,12 @@ export default function PunchPassComponent(props){
                 Accept: 'application/json',
             },
         })
-            .then(()=>props.handleReload())
+            .then(()=>{
+                props.handleReload()
+                message.success("Pomyślnie dodano wejście na karnet !")
+            })
+
+
     }
 
     function handleTakePunch(){
@@ -23,7 +27,10 @@ export default function PunchPassComponent(props){
                 Accept: 'application/json',
             },
         })
-            .then(()=> props.handleReload())
+            .then(()=> {
+                props.handleReload()
+                message.success("Pomyślnie zdjęto wejście z karnetu !")
+            })
     }
 
     function handleDelete(){

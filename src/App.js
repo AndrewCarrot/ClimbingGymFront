@@ -1,27 +1,24 @@
 import './styles/App.css';
 import {
+    CalendarOutlined,
     CameraOutlined,
-    CreditCardOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
+    ClockCircleOutlined,
+    CreditCardOutlined, EditOutlined,
+    FieldNumberOutlined,
     SearchOutlined,
-    UserOutlined,
-    DownOutlined, ClockCircleOutlined, FieldNumberOutlined, CalendarOutlined, UserAddOutlined, TeamOutlined
+    TeamOutlined,
+    UserAddOutlined,
+    UserOutlined
 } from '@ant-design/icons';
-import {
-    Layout,
-    Button,
-    Input,
-    Menu,
-    Dropdown,
-    Space
-} from "antd"
+import {Layout, Menu} from "antd"
 import 'antd/dist/antd.css'
 import {Link, Route, Routes} from "react-router-dom";
 import SearchComponent from "./components/SearchComponent";
 import ClimberProfileComponent from "./components/ClimberProfileComponent";
 import NewClimberComponent from "./components/NewClimberComponent";
 import AllClimbersComponent from "./components/AllClimbersComponent";
+import ClassScheduleComponent from "./components/ClassScheduleComponent";
+import ClassEditComponent from "./components/ClassEditComponent";
 
 const {Header, Content, Footer, Sider} = Layout
 
@@ -42,8 +39,8 @@ function App() {
     const items = [
         getItem(<Link to="/read">Odczyt</Link>, 'sub1', <SearchOutlined />),
         getItem('Sekcje', 'sub2', <CreditCardOutlined />, [
-            getItem(<Link to="/sekcje">plan sekcji</Link>, '3', <CalendarOutlined />),
-            getItem('wyszukaj', '4')
+            getItem(<Link to="/classes">plan sekcji</Link>, '3', <CalendarOutlined />),
+            getItem(<Link to="/classes/edit">edycja</Link>, '4', <EditOutlined />)
         ]),
         getItem('Karnety', 'sub3', <CameraOutlined />, [
             getItem(<Link to="/czasowy">czasowy</Link>, '5', <ClockCircleOutlined />),
@@ -67,7 +64,6 @@ function App() {
                 <Layout>
                     <Sider style={{backgroundColor: "white"}} className="main--sider">
                         <Menu
-                            // onClick={(obj)=>console.log(obj.key)}
                             style={{
 
                             }}
@@ -80,7 +76,7 @@ function App() {
                     <Content
                         style={{
                             backgroundColor: "#f0f2f5",
-                            height:"1000px"
+                            minHeight:"1000px"
                     }}
                     >
                         <Routes>
@@ -88,6 +84,8 @@ function App() {
                             <Route path="climber-profile" element={<ClimberProfileComponent />} />
                             <Route path="new-climber" element={<NewClimberComponent/>}/>
                             <Route path="/all-climbers" element={<AllClimbersComponent />} />
+                            <Route path="classes" element={<ClassScheduleComponent/>}/>
+                            <Route path="classes/edit" element={<ClassEditComponent/>}/>
                         </Routes>
                     </Content>
                 </Layout>

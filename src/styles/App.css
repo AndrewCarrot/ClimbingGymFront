@@ -75,7 +75,6 @@
     width: 150px;
 }
 
-
 /* all modals */
 
 .ant-modal-body{
@@ -113,4 +112,105 @@
     width: 70%;
     padding: 50px 80px;
     margin-left: 50px;
+}
+
+/* ClassSchedule */
+
+.ClassSchedule{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+
+.schedule--container{
+    padding: 30px;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.ClassSchedule .ant-row{
+    width: 1200px;
+    border-top: solid 1px #929dab;
+    border-bottom: solid 1px #929dab;
+    border-left: solid 1px #929dab;
+
+}
+
+.ClassSchedule .ant-card{
+    height: 80px;
+}
+
+.ClassSchedule .ant-col{
+    background-color: white;
+    border-right: solid 1px #929dab;
+}
+
+.schedule--div{
+    background-color: white;
+}
+
+/* ClassScheduleTile */
+
+.Tile {
+    font-size: 10px;
+    margin: 5px;
+    padding: 5px;
+    width: 190px;
+    min-height: 100px;
+    border-radius: 10px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
+    background: radial-gradient(#1fe4f5, #3fbafe);
+}
+
+.Tile > h1{
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.Tile > h2{
+    font-family: sans-serif;
+}
+
+.Tile > h3{
+    font-size: 15px;
+}
+
+.advanced{
+    background: radial-gradient(#de213d, #d01632);
+}
+
+.intermediate{
+    background: radial-gradient(#d5b828, #c4a81e);
+}
+
+.beginner{
+    background: radial-gradient(#37d72c, #2ac420);
+}
+
+.children{
+    background: radial-gradient(#e741ee, #d227d9);
+}
+
+/* ClassEditComponent */
+
+.ClassEdit{
+    width: 70%;
+    padding: 50px 80px;
+    margin-left: 50px;
+}
+
+.class--edit--modal .ant-modal-body{
+    height: 175px;
+    padding: 10px 40px 10px 20px;
+}
+
+.class--edit--modal .ant-modal-body > * {
+    margin: 5px;
 }

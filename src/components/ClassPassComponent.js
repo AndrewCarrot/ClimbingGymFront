@@ -1,4 +1,4 @@
-import {Popconfirm, Space, Table} from "antd";
+import {Popconfirm, Space, Table, message} from "antd";
 import {MinusCircleFilled, MinusSquareTwoTone, PlusSquareTwoTone, QuestionCircleOutlined} from "@ant-design/icons";
 
 
@@ -27,7 +27,10 @@ export default function ClassPassComponent(props){
                 Accept: 'application/json',
             },
         })
-            .then(()=>props.handleReload())
+            .then(()=>{
+                props.handleReload()
+                message.success("Pomyślnie dodano wejście na sekcje !")
+            })
     }
 
     function handleTakePunch(){
@@ -37,7 +40,10 @@ export default function ClassPassComponent(props){
                 Accept: 'application/json',
             },
         })
-            .then(()=> props.handleReload())
+            .then(()=> {
+                props.handleReload()
+                message.success("Pomyślnie zdjęto wejście z sekcji !")
+            })
     }
 
     function handleDelete(){
