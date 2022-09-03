@@ -198,6 +198,15 @@
     background: radial-gradient(#e741ee, #d227d9);
 }
 
+.Tile:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.Tile:active{
+    opacity: 0.9;
+}
+
 /* ClassEditComponent */
 
 .ClassEdit{

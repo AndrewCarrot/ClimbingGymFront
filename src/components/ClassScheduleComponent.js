@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import ClassScheduleTile from "./ClassScheduleTile";
 
 export default function ClassScheduleComponent(){
-
+    const [reload, setReload] = useState(false)
     const [groups, setGroups] = useState([{
         id: null,
         name: "",
@@ -20,12 +20,15 @@ export default function ClassScheduleComponent(){
         fetch(`https://spider-system.herokuapp.com/groups/get/all`)
             .then(res => res.json())
             .then(data => setGroups(data))
-    },[])
+    },[reload])
 
+    function handleReload(){
+        setReload(prevState => !prevState)
+    }
 
     function generateTile(hour,day){
         return groups.map(
-            g=> (g.classTime[0] === hour && g.dayOfWeek === day) && <ClassScheduleTile key={g.id} data={g}/>
+            g=> (g.classTime[0] === hour && g.dayOfWeek === day) && <ClassScheduleTile key={g.id} data={g} handleReload={handleReload}/>
         )
     }
 

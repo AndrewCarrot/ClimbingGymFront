@@ -42,7 +42,7 @@ export default function SearchComponent(){
                     margin: "10px",
                     width: "300px"
                 }}
-                placeholder="ding dong"
+                placeholder="numer karty"
                 allowClear
                 enterButton="Szukaj"
                 size="large"
