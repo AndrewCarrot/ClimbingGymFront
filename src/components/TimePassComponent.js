@@ -152,7 +152,6 @@ export default function TimePassComponent(props){
                 title="Edycja"
                 visible={isModalVisible}
                 onCancel={handleModalClose}
-                onOk={handleModalConfirm}
                 footer={[
                     <Button
                         type={"primary"}
@@ -163,6 +162,7 @@ export default function TimePassComponent(props){
                     </Button>,
                     <Button
                         type={"primary"}
+                        onClick={handleModalConfirm}
                     >
                         Zapisz zmiany
                     </Button>
