@@ -17,7 +17,7 @@ String.prototype.toHHMMSS = function () {
 export default function ClassScheduleTile(props){
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [searchValue, setSearchValue] = useState('')
-    const [err, setErr] = useState(true)
+    const [err, setErr] = useState(false)
 
     let data = props.data
 

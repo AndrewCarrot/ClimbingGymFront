@@ -1,12 +1,54 @@
 
-import {Popconfirm, Table} from "antd";
-import {MinusCircleFilled, QuestionCircleOutlined} from "@ant-design/icons";
+import {Button, Input, Modal, Popconfirm, Table} from "antd";
+import {EditTwoTone, MinusCircleFilled, QuestionCircleOutlined} from "@ant-design/icons";
+import {useState} from "react";
 
 
 export default function TimePassComponent(props){
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [inputValue, setInputValue] = useState(null)
+
+    function handleModalClose(){
+        setIsModalVisible(false)
+        setInputValue(null)
+    }
+
+    function handleInputChange(e){
+        setInputValue(e.target.value)
+    }
+
+    const handlePassRenew = async () => {
+        const res = await fetch(`https://spider-system.herokuapp.com/timePass/${props.climberId}/renew`,{
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json'
+            }
+        });
+
+        if(res.ok){
+            setIsModalVisible(false)
+            props.handleReload()
+        }
+    }
+
+    const handleModalConfirm = async ()=>{
+        if(inputValue !== null) {
+            const res = await fetch(`https://spider-system.herokuapp.com/timePass/${props.climberId}/addDays?days=${inputValue}`, {
+                method: 'PATCH',
+                headers: {
+                    Accept: 'application/json'
+                }
+            });
+
+            if (res.ok) {
+                setIsModalVisible(false)
+                props.handleReload()
+            }
+        }
 
 
-    //TODO popup with confirmation
+    }
+
     function handleDelete(){
         fetch(`https://spider-system.herokuapp.com/timePass/${props.climberId}/delete`, {
             method: 'DELETE',
@@ -76,6 +118,13 @@ export default function TimePassComponent(props){
             key: 'leftDays',
         },
         {
+          title:'Edycja',
+          dataIndex: 'edit',
+          render: (_,record)=>(
+              <a onClick={()=>setIsModalVisible(true)}><EditTwoTone style={{fontSize: 20}} /></a>
+          )
+        },
+        {
             title:'Usuń',
             dataIndex: 'delete',
             render: (_,record)=>(
@@ -94,11 +143,39 @@ export default function TimePassComponent(props){
                 </Popconfirm>
             )
         }
-
     ];
+
     return(
         <div className={"TimePass"}>
             <Table dataSource={dataSource} columns={columns} pagination={false}/>
+            <Modal
+                title="Edycja"
+                visible={isModalVisible}
+                onCancel={handleModalClose}
+                onOk={handleModalConfirm}
+                footer={[
+                    <Button
+                        type={"primary"}
+                        style={{backgroundColor:"green", float:"left"}}
+                        onClick={handlePassRenew}
+                    >
+                        Odnów karnet
+                    </Button>,
+                    <Button
+                        type={"primary"}
+                    >
+                        Zapisz zmiany
+                    </Button>
+                ]}
+            >
+                <Input
+                    placeholder="wydłużenie dni"
+                    onChange={handleInputChange}
+                    value={inputValue}
+                >
+
+                </Input>
+            </Modal>
         </div>
     )
 }

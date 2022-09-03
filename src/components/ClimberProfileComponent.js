@@ -14,7 +14,7 @@ import {useEffect, useState} from "react";
 import AddPunchPassComponent from "./AddPunchPassComponent";
 import AddTimePassComponent from "./AddTimePassComponent";
 import AddClassPassComponent from "./AddClassPassComponent";
-import {Button, Modal} from "antd";
+import {Alert, Button, Modal} from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 
@@ -85,7 +85,12 @@ export default function ClimberProfileComponent(){
     return(
         <div className={"Climber"} >
 
-            <p>{climber.note}</p>
+            {climber.note !== null ? <Alert
+                message={climber.note}
+                type="info"
+                showIcon
+            /> : <></> }
+
             <header className={"climber--header"}>
                 <div className={"name--div"}>
                     <h1><ContactsTwoTone/></h1>

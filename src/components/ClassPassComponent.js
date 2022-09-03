@@ -1,8 +1,17 @@
-import {Popconfirm, Space, Table, message} from "antd";
-import {MinusCircleFilled, MinusSquareTwoTone, PlusSquareTwoTone, QuestionCircleOutlined} from "@ant-design/icons";
+import {Popconfirm, Space, Table, message, Modal, Input, Button} from "antd";
+import {
+    EditTwoTone,
+    MinusCircleFilled,
+    MinusSquareTwoTone,
+    PlusSquareTwoTone,
+    QuestionCircleOutlined
+} from "@ant-design/icons";
+import {useState} from "react";
 
 
 export default function ClassPassComponent(props){
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [inputValue, setInputValue] = useState(null)
 
     function getParsedDate(date){
 
@@ -115,6 +124,13 @@ export default function ClassPassComponent(props){
             )
         },
         {
+            title:'Edycja',
+            dataIndex: 'edit',
+            render: (_,record)=>(
+                <a onClick={()=>setIsModalVisible(true)}><EditTwoTone style={{fontSize: 20}} /></a>
+            )
+        },
+        {
             title:'Usuń',
             dataIndex: 'delete',
             render: (_,record)=>(
@@ -137,9 +153,76 @@ export default function ClassPassComponent(props){
 
     ];
 
+    function handleModalClose() {
+        setIsModalVisible(false)
+        setInputValue(null)
+    }
+
+    const handleModalConfirm = async () => {
+        if(inputValue !== null) {
+            const res = await fetch(`https://spider-system.herokuapp.com/classPass/${props.climberId}/addDays?days=${inputValue}`, {
+                method: 'PATCH',
+                headers: {
+                    Accept: 'application/json'
+                }
+            });
+
+            if (res.ok) {
+                props.handleReload()
+                setIsModalVisible(false)
+            }
+        }
+    }
+
+    function handleInputChange(e){
+        setInputValue(e.target.value)
+    }
+
+    const handlePassRenew = async () => {
+        const res = await fetch(`https://spider-system.herokuapp.com/classPass/${props.climberId}/renew`,{
+            method: 'PATCH',
+            headers: {
+                Accept: 'application/json'
+            }
+        });
+
+        if(res.ok){
+            setIsModalVisible(false)
+            props.handleReload()
+        }
+    }
+
     return(
         <div className="ClassPass">
             <Table dataSource={dataSource} columns={columns} pagination={false}/>
+            <Modal
+                title="Edycja"
+                visible={isModalVisible}
+                onCancel={handleModalClose}
+                onOk={handleModalConfirm}
+                footer={[
+                    <Button
+                        type={"primary"}
+                        style={{backgroundColor:"green", float:"left"}}
+                        onClick={handlePassRenew}
+                    >
+                        Odnów karnet
+                    </Button>,
+                    <Button
+                        type={"primary"}
+                    >
+                        Zapisz zmiany
+                    </Button>
+                ]}
+            >
+                <Input
+                    placeholder="wydłużenie dni"
+                    onChange={handleInputChange}
+                    value={inputValue}
+                >
+
+                </Input>
+            </Modal>
         </div>
     )
 }
