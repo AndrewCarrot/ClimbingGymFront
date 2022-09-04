@@ -1,5 +1,5 @@
 
-import {Button, Input, Modal, Popconfirm, Table} from "antd";
+import {Button, Input, Modal, Popconfirm, Table, message} from "antd";
 import {EditTwoTone, MinusCircleFilled, QuestionCircleOutlined} from "@ant-design/icons";
 import {useState} from "react";
 
@@ -26,6 +26,7 @@ export default function TimePassComponent(props){
         });
 
         if(res.ok){
+            message.success("Pomyślnie odnowiono karnet!")
             setIsModalVisible(false)
             props.handleReload()
         }
@@ -41,11 +42,14 @@ export default function TimePassComponent(props){
             });
 
             if (res.ok) {
+                message.success("Pomyślnie wydłużono czas trwania karnetu!")
                 setIsModalVisible(false)
+                setInputValue(null)
                 props.handleReload()
             }
+        }else{
+            setIsModalVisible(false)
         }
-
 
     }
 

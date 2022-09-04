@@ -168,9 +168,13 @@ export default function ClassPassComponent(props){
             });
 
             if (res.ok) {
+                message.success("Pomyślnie wydłużono czas trwania karnetu!")
                 props.handleReload()
                 setIsModalVisible(false)
+                setInputValue(null)
             }
+        }else{
+            setIsModalVisible(false)
         }
     }
 
@@ -187,6 +191,7 @@ export default function ClassPassComponent(props){
         });
 
         if(res.ok){
+            message.success("Pomyślne odnowiono karnet!")
             setIsModalVisible(false)
             props.handleReload()
         }

@@ -7,7 +7,7 @@ import {
     UserOutlined
 } from "@ant-design/icons";
 import PunchPassComponent from "./PunchPassComponent";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import TimePassComponent from "./TimePassComponent";
 import ClassPassComponent from "./ClassPassComponent";
 import {useEffect, useState} from "react";
@@ -19,7 +19,10 @@ import TextArea from "antd/es/input/TextArea";
 
 
 export default function ClimberProfileComponent(){
-    const [err, setErr] = useState(false)
+    const [error, setError] = useState({
+        err:false,
+        msg:""
+    })
     const [isDataEditVisible, setIsDataEditVisible] = useState(false)
     const [textAreaValue, setTextAreaValue] = useState("")
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -43,13 +46,11 @@ export default function ClimberProfileComponent(){
         cardNumber:""
     })
 
+    const navigate = useNavigate()
     const location = useLocation();
-    const [cardNumber, setCardNumber] = useState(location.state)
-
-
 
     useEffect(()=>{
-        fetch(`https://spider-system.herokuapp.com/card-associated/get?cardNumber=${cardNumber}`)
+        fetch(`https://spider-system.herokuapp.com/card-associated/get?cardNumber=${location.state}`)
             .then(res => res.json())
             .then(data => setClimber(data.climber))
     },[reload])
@@ -112,32 +113,49 @@ export default function ClimberProfileComponent(){
 
     function closeDataEditModal(){
         setIsDataEditVisible(false)
-        setErr(false)
+        setError({
+            err: false,
+            msg:""
+        })
     }
 
     const handleDataEdit = async () => {
-        const res = await fetch(`https://spider-system.herokuapp.com/climbers/update?climberId=${climber.id}`,{
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                cardNumber: dataEditValues.cardNumber,
-                firstName: dataEditValues.firstName,
-                lastName: dataEditValues.lastName,
-                phoneNumber: dataEditValues.phoneNumber
-            })
-        })
 
-        if(res.ok){
-            message.success("Pomyślnie zmieniono dane!")
-            setCardNumber(dataEditValues.cardNumber)
-            setIsDataEditVisible(false)
-            setErr(false)
-            handleReload()
-        }else{
-            setErr(true)
+        if(dataEditValues.firstName !== "" && dataEditValues.lastName !== "" && dataEditValues.phoneNumber !== "" && dataEditValues.cardNumber !== "") {
+            const res = await fetch(`https://spider-system.herokuapp.com/climbers/update?climberId=${climber.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cardNumber: dataEditValues.cardNumber,
+                    firstName: dataEditValues.firstName,
+                    lastName: dataEditValues.lastName,
+                    phoneNumber: dataEditValues.phoneNumber
+                })
+            })
+
+            if (res.ok) {
+                message.success("Pomyślnie zmieniono dane!")
+                setIsDataEditVisible(false)
+                setError({
+                    err: false,
+                    msg: ""
+                })
+                navigate('/climber-profile', {state: dataEditValues.cardNumber});
+                handleReload()
+            } else {
+                setError({
+                    err: true,
+                    msg: "Coś poszło nie tak"
+                })
+            }
+        }else {
+            setError({
+                err:true,
+                msg:"Wszystkie pola musza być wypelnione"
+            })
         }
     }
 
@@ -260,7 +278,7 @@ export default function ClimberProfileComponent(){
                     >
                         Zapisz zmiany
                     </Button>,
-                     err && <Alert key="error" type="error" showIcon message="Coś poszło nie tak" description="spróbuj ponownie" style={{fontWeight:"bold"}}/>
+                     error.err && <Alert key="error" type="error" showIcon message={error.msg} description="spróbuj ponownie" style={{fontWeight:"bold"}}/>
                 ]}
             >
                 <div

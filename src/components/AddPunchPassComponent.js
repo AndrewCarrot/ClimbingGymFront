@@ -87,7 +87,7 @@ export default function AddPunchPassComponent(props){
                         width: 200
                     }}
                     min={0}
-                    max={10}
+                    max={100}
                     defaultValue={8}
                     onChange={handleInputNumber}
                 />

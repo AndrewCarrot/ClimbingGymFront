@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {Button, Form, Input, Table} from "antd";
-import {SearchOutlined} from "@ant-design/icons";
+import {Button, Form, Input, Popconfirm, Table} from "antd";
+import {CloseCircleFilled, QuestionCircleOutlined, SearchOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router-dom";
 
 
@@ -11,6 +11,7 @@ export default function AllClimbersComponent(){
         cardNumber:"",
         phoneNumber:""
     }])
+    const [reload, setReload] = useState(false)
 
     const [form] = Form.useForm();
     const navigate = useNavigate()
@@ -23,8 +24,11 @@ export default function AllClimbersComponent(){
             .then(res => res.json())
             .then(data => setClimbers(data.content))
         }
-        ,[])
+        ,[reload])
 
+    function handleReload(){
+        setReload(prevState => !prevState)
+    }
 
     // TODO wyszukiwanie po kilku polach jednocześnie
 
@@ -65,6 +69,18 @@ export default function AllClimbersComponent(){
 
     }
 
+    const handleProfileDelete = async (id) => {
+        const res = await fetch(`https://spider-system.herokuapp.com/climbers/delete?climberId=${id}`,{
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+            },
+        })
+
+        handleReload()
+
+    }
+
 
     let dataSource
     if(Array.isArray(climbers)) {
@@ -73,7 +89,8 @@ export default function AllClimbersComponent(){
             firstName: climber.firstName,
             lastName: climber.lastName,
             cardNumber: climber.cardNumber,
-            phoneNumber: climber.phoneNumber
+            phoneNumber: climber.phoneNumber,
+            id: climber.id
 
         }))
     } else {
@@ -82,7 +99,8 @@ export default function AllClimbersComponent(){
             firstName: climbers.firstName,
             lastName: climbers.lastName,
             cardNumber: climbers.cardNumber,
-            phoneNumber: climbers.phoneNumber
+            phoneNumber: climbers.phoneNumber,
+            id: climbers.id
         }]
     }
 
@@ -112,6 +130,24 @@ export default function AllClimbersComponent(){
             dataIndex: 'profile',
             render: (_, record) => <a onClick={()=>handleProfileRedirect(record.key)}> Przejdź </a>
         },
+        {
+            title:"Usuń",
+            dataIndex: "delete",
+            render: (_, record) =>
+                <Popconfirm
+                    title="Are you sure？"
+                    onConfirm={()=>handleProfileDelete(record.id)}
+                    icon={
+                        <QuestionCircleOutlined
+                            style={{
+                                color: 'red',
+                            }}
+                        />
+                    }
+                >
+                    <a> <CloseCircleFilled style={{color:"red", fontSize:"20px"}} /> </a>
+                </Popconfirm>
+        }
     ];
 
 
