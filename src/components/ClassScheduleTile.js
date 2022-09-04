@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {Alert, Button, Modal} from "antd";
 import Search from "antd/es/input/Search";
+import {useNavigate} from "react-router-dom";
 
 String.prototype.toHHMMSS = function () {
     const sec_num = parseInt(this, 10);
@@ -18,6 +19,7 @@ export default function ClassScheduleTile(props){
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [searchValue, setSearchValue] = useState('')
     const [err, setErr] = useState(false)
+    const navigate = useNavigate()
 
     let data = props.data
 
@@ -98,18 +100,35 @@ export default function ClassScheduleTile(props){
         setErr(false)
     }
 
+    function handleRedirect(cardNumber){
+        navigate('/climber-profile',{state:cardNumber});
+    }
+
     const climbers = data.climbers.map(c =>
         <div key={c.id} style={{
             display: "flex",
             justifyContent: "space-between"
         }}>
             <p>{c.firstName + " " + c.lastName}</p>
-            <Button
-                type="primary"
-                onClick={()=>handleClimberDelete(c.id)}
-            >
-                usuń
-            </Button>
+            <div style={{display:"flex", justifyContent:"center"}}>
+                <label style={{fontWeight:"bold", marginRight:"5px"}} htmlFor="">telefon:</label>
+                <h4>{c.phoneNumber}</h4>
+            </div>
+            <div>
+                <Button
+                    type="primary"
+                    onClick={()=>handleRedirect(c.cardNumber)}
+                    style={{marginRight: "5px"}}
+                >
+                    Profil
+                </Button>
+                <Button
+                    type="primary"
+                    onClick={()=>handleClimberDelete(c.id)}
+                >
+                    usuń
+                </Button>
+            </div>
         </div>
     )
     return(
@@ -127,6 +146,7 @@ export default function ClassScheduleTile(props){
                 bodyStyle={{ overflowY: 'scroll',height:"200px" }}
                 footer={[
                     <Search
+                        key="cardNumber"
                         value={searchValue}
                         style={{
                             float: "left",
@@ -146,7 +166,7 @@ export default function ClassScheduleTile(props){
                     >
                         Zatwierdź
                     </Button>,
-                    err && <Alert style={{float:"left", height:"33px", paddingLeft:"10px"}} type="error" message="karta nie istnieje"/>
+                    err && <Alert key="alert" style={{float:"left", height:"33px", paddingLeft:"10px"}} type="error" message="karta nie istnieje"/>
                 ]}
             >
                 {climbers}
