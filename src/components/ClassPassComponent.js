@@ -216,7 +216,7 @@ export default function ClassPassComponent(props){
                         type={"primary"}
                         onClick={handleModalConfirm}
                     >
-                        Zapisz zmiany
+                        Przedłuż
                     </Button>
                 ]}
             >

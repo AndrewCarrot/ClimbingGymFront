@@ -168,7 +168,7 @@ export default function TimePassComponent(props){
                         type={"primary"}
                         onClick={handleModalConfirm}
                     >
-                        Zapisz zmiany
+                        Przedłuż
                     </Button>
                 ]}
             >

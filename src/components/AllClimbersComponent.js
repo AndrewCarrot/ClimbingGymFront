@@ -45,6 +45,9 @@ export default function AllClimbersComponent(){
             fetch(climbersRequest + `by-card-number?cardNumber=${values.cardNumber}`)
                 .then(res => res.json())
                 .then(data => setClimbers(data))
+        else if(values.phoneNumber) {
+            //TODO
+        }
         else
             fetch(climbersRequest + 'all')
                 .then(res => res.json())
@@ -161,15 +164,19 @@ export default function AllClimbersComponent(){
                 onFinish={onFinish}
             >
 
-                <Form.Item name="firstName"  style={{width:"200px"}}>
+                <Form.Item name="firstName"  style={{width:"150px"}}>
                     <Input placeholder="Imię" prefix={<SearchOutlined />} />
                 </Form.Item>
-                <Form.Item name="lastName" style={{width:"200px"}}>
+                <Form.Item name="lastName" style={{width:"150px"}}>
                     <Input placeholder="Nazwisko" prefix={<SearchOutlined />} />
                 </Form.Item>
-                <Form.Item name="cardNumber" style={{width:"200px"}}>
+                <Form.Item name="cardNumber" style={{width:"150px"}}>
                     <Input placeholder="Numer karty" prefix={<SearchOutlined />} />
                 </Form.Item>
+                <Form.Item name="phoneNumber" style={{width:"150px"}}>
+                    <Input placeholder="Numer telefonu" prefix={<SearchOutlined />} />
+                </Form.Item>
+
                 <Form.Item >
                     <Button
                         type="primary"
@@ -181,7 +188,7 @@ export default function AllClimbersComponent(){
                 </Form.Item>
             </Form>
 
-            <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 50 }} scroll={{ y: 400 }} />
+            <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 10 }} scroll={{ y: 600 }} />
         </div>
     )
 }

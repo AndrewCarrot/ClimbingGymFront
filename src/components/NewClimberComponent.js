@@ -6,6 +6,9 @@ export default function NewClimberComponent(){
     const navigate = useNavigate()
 
     const onFinish = async(values) =>{
+
+        const {firstName, lastName, cardNumber, phoneNumber} = values
+
        const response = await fetch(`https://spider-system.herokuapp.com/climbers/create`, {
             method: 'POST',
             headers: {
@@ -13,13 +16,12 @@ export default function NewClimberComponent(){
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                cardNumber: values.cardNumber,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                phoneNumber: values.phoneNumber
+                cardNumber: cardNumber,
+                firstName: firstName,
+                lastName: lastName,
+                phoneNumber: phoneNumber
             })
         });
-
        if (response.ok){
 
            navigate('/climber-profile', {state: values.cardNumber});
@@ -57,7 +59,7 @@ export default function NewClimberComponent(){
                         },
                     ]}
                 >
-                    <Input />
+                    <Input placeholder="Imię" />
                 </Form.Item>
 
                 <Form.Item
@@ -70,7 +72,7 @@ export default function NewClimberComponent(){
                         },
                     ]}
                 >
-                    <Input />
+                    <Input placeholder="Nazwisko"/>
                 </Form.Item>
 
                 <Form.Item
@@ -80,12 +82,21 @@ export default function NewClimberComponent(){
                         {
                             required: true,
                             message: "Wprowadź kartę!"
-                        }
+                        },
+                        ({getFieldValue})=>({
+                            validator(_,value){
+                                // console.log(getFieldValue('lastName'))
+                                if(value.length !== 10)
+                                    return Promise.reject('Nieprawidłowa długość numeru karty')
+                                else if(isNaN(value))
+                                    return Promise.reject('Numer karty zawiera niedozwolone znaki')
+                                return Promise.resolve()
+                            }
+                        })
                     ]}
                 >
-                    <Input/>
+                    <Input placeholder="Karta"/>
                 </Form.Item>
-
                 <Form.Item
                     label="Numer telefonu"
                     name="phoneNumber"
@@ -96,7 +107,7 @@ export default function NewClimberComponent(){
                         }
                     ]}
                 >
-                    <Input/>
+                    <Input placeholder="Numer telefonu"/>
                 </Form.Item>
 
                 <Form.Item
@@ -106,7 +117,7 @@ export default function NewClimberComponent(){
                     }}
                 >
                     <Button type="primary" htmlType="submit">
-                        Submit
+                        Dodaj
                     </Button>
                 </Form.Item>
             </Form>

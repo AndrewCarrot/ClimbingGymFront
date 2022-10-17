@@ -2,7 +2,7 @@ import {
     ContactsTwoTone, CreditCardOutlined,
     CreditCardTwoTone,
     PhoneOutlined,
-    PhoneTwoTone,
+    PhoneTwoTone, QuestionCircleOutlined,
     SnippetsTwoTone,
     UserOutlined
 } from "@ant-design/icons";
@@ -14,7 +14,7 @@ import {useEffect, useState} from "react";
 import AddPunchPassComponent from "./AddPunchPassComponent";
 import AddTimePassComponent from "./AddTimePassComponent";
 import AddClassPassComponent from "./AddClassPassComponent";
-import {Alert, Button, Input, Modal, message} from "antd";
+import {Alert, Button, Input, Modal, message, Popconfirm} from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 
@@ -121,7 +121,22 @@ export default function ClimberProfileComponent(){
 
     const handleDataEdit = async () => {
 
-        if(dataEditValues.firstName !== "" && dataEditValues.lastName !== "" && dataEditValues.phoneNumber !== "" && dataEditValues.cardNumber !== "") {
+        if(dataEditValues.firstName === "" || dataEditValues.lastName === "" || dataEditValues.phoneNumber === "" || dataEditValues.cardNumber === ""){
+            setError({
+                err:true,
+                msg:"Wszystkie pola musza być wypelnione"
+            })
+        }else if(dataEditValues.cardNumber.length !== 10){
+            setError({
+                err: true,
+                msg:"Nieprawidłowa długość numeru karty"
+            })
+        }else if(isNaN(dataEditValues.cardNumber)){
+            setError({
+                err: true,
+                msg:"Numer karty zawiera niedozwolone znaki"
+            })
+        }else {
             const res = await fetch(`https://spider-system.herokuapp.com/climbers/update?climberId=${climber.id}`, {
                 method: 'PUT',
                 headers: {
@@ -151,11 +166,6 @@ export default function ClimberProfileComponent(){
                     msg: "Coś poszło nie tak"
                 })
             }
-        }else {
-            setError({
-                err:true,
-                msg:"Wszystkie pola musza być wypelnione"
-            })
         }
     }
 
@@ -200,16 +210,27 @@ export default function ClimberProfileComponent(){
                             paddingTop:8
                         }}
                     >/</p>
-                    <a
-                        style={{
-                            fontWeight:"bold",
-                            fontSize:16,
-                            paddingBottom:8
-                        }}
-                        onClick={handleDeleteNote}
+                    <Popconfirm
+                        title="Jesteś pewny?"
+                        onConfirm={handleDeleteNote}
+                        icon={
+                            <QuestionCircleOutlined
+                                style={{
+                                    color: 'red',
+                                }}
+                            />
+                        }
                     >
-                        Usuń notatkę
-                    </a>
+                        <a
+                            style={{
+                                fontWeight:"bold",
+                                fontSize:16,
+                                paddingBottom:8
+                            }}
+                        >
+                            Usuń notatkę
+                        </a>
+                    </Popconfirm>
                     <Modal
                         className="note--modal"
                         title="Notatka"
@@ -258,6 +279,9 @@ export default function ClimberProfileComponent(){
             >
                 Edytuj dane
             </Button>
+
+
+            {/* Modal edycji danych */}
             <Modal
                 bodyStyle={{display:"flex", flexDirection:"horizontal", height:"120px"}}
                 title="Edycja danych"
