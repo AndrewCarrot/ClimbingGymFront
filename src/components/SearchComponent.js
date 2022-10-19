@@ -27,10 +27,10 @@ export default function SearchComponent(){
         }
         const data = await response.json();
 
-
-         /*TODO create customPassComponent and check where to redirect */
         if(data.climber !== null)
             navigate('/climber-profile',{state:value});
+        // else if(data.customPass !==null)
+        //     navigate('/custom-pass', {state:value});
 
         setErr(true)
     };

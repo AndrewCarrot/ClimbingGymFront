@@ -42,10 +42,6 @@ function App() {
             getItem(<Link to="/classes">plan sekcji</Link>, '3', <CalendarOutlined />),
             getItem(<Link to="/classes/edit">edycja</Link>, '4', <EditOutlined />)
         ]),
-        getItem('Karnety', 'sub3', <CameraOutlined />, [
-            getItem(<Link to="/czasowy">czasowy</Link>, '5', <ClockCircleOutlined />),
-            getItem(<Link to="/ilosciowy">ilościowy</Link>, '6', <FieldNumberOutlined />)
-        ]),
         getItem("Klienci", 'sub4', <UserOutlined/>,[
             getItem(<Link to="/new-climber">nowy klient</Link>, '7', <UserAddOutlined />),
             getItem(<Link to="/all-climbers">wszyscy</Link>, '8', <TeamOutlined />)

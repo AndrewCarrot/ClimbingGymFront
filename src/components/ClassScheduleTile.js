@@ -1,7 +1,8 @@
 import {useState} from "react";
-import {Alert, Button, Modal} from "antd";
+import {Alert, Button, Modal, Popconfirm} from "antd";
 import Search from "antd/es/input/Search";
 import {useNavigate} from "react-router-dom";
+import {QuestionCircleOutlined} from "@ant-design/icons";
 
 String.prototype.toHHMMSS = function () {
     const sec_num = parseInt(this, 10);
@@ -122,12 +123,24 @@ export default function ClassScheduleTile(props){
                 >
                     Profil
                 </Button>
-                <Button
-                    type="primary"
-                    onClick={()=>handleClimberDelete(c.id)}
+                <Popconfirm
+                    title="Are you sure？"
+                    onConfirm={()=>handleClimberDelete(c.id)}
+                    icon={
+                        <QuestionCircleOutlined
+                            style={{
+                                color: 'red',
+                            }}
+                        />
+                    }
                 >
-                    usuń
-                </Button>
+                    <Button
+                        type="primary"
+                    >
+                        usuń
+                    </Button>
+                </Popconfirm>
+
             </div>
         </div>
     )
